@@ -8,24 +8,24 @@ RR                              3
 
 """
 
-def FCFS (x, y, a, b, c):
+def FCFS (x, y, z, arr):
     pass
 
-def SJF (x, y, a, b, c):
+def SJF (x, y, z, arr):
     pass
 
-def SRTF (x, y, a, b, c):
+def SRTF (x, y, z, arr):
     pass
 
-def RR (x, y, a, b, c):
+def RR (x, y, z, arr):
     pass
 
 
 # main
 x, y, z = list(map(int,input().strip().split(" ")))
 
-for i in range(y):
-    a, b, c = list(map(int,input().strip().split(" ")))
+# arr[i] contains a, b, c
+arr = [list(map(int,input().strip().split(" "))) for _ in range(y)]
 
 if x == 0:
     print("0")
