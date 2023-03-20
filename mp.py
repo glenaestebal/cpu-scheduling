@@ -7,6 +7,7 @@ SRTF                            2
 RR                              3
 
 """
+import copy
 
 def FCFS (x, y, z, arr):
     pass
@@ -15,12 +16,16 @@ def SJF (x, y, z, arr):
     pass
 
 def SRTF (x, y, z, arr):
+    temp_arr = []
     arrived_proc = []
     gantt_chart = []
+    output = []
     time = arr[0][1]
 
-    finish = False
+    temp_arr = copy.deepcopy(arr)
+    temp_arr.sort(key=lambda x:x[0])
 
+    finish = False
     while(not finish):
         arr.sort(key=lambda x:x[1])
     
@@ -54,20 +59,37 @@ def SRTF (x, y, z, arr):
     for i in range(0, len(gantt_chart)-1):
             if(gantt_chart[i][0] != gantt_chart[i+1][0]):
                 e_time = gantt_chart[i][2]
-                print("{} start time: {} end time: {}".format(gantt_chart[i][0], s_time, e_time))
+                output.append([gantt_chart[i][0], s_time, e_time])
                 s_time = gantt_chart[i+1][1]
                 
             elif(i == len(gantt_chart)-2):
                 if(gantt_chart[i][0] != gantt_chart[i+1][0]):
                     e_time = gantt_chart[i][2]
-                    print("{} start time: {} end time: {}".format(gantt_chart[i][0], s_time, e_time))
+                    output.append([gantt_chart[i][0], s_time, e_time])
                     s_time = gantt_chart[i+1][1]
                 
                 else:
                     e_time = gantt_chart[i+1][2]
-                    print("{} start time: {} end time: {}".format(gantt_chart[i][0], s_time, e_time))
+                    output.append([gantt_chart[i][0], s_time, e_time])
+    
+    output.sort(key=lambda x:x[0])
 
+    for i in range(0, len(output)-1):
+        print("{} start time: {} end time: {}".format(output[i][0], output[i][1], output[i][2]))
+        if(output[i][0] != output[i+1][0]):
+            waiting_time = output[i][2] - temp_arr[output[i][0]-1][1]
+            waiting_time -= temp_arr[output[i][0]-1][2]
+            print("Waiting Time: {}".format(waiting_time))
 
+        if(i == len(output)-2):
+            print("{} start time: {} end time: {}".format(output[i+1][0], output[i+1][1], output[i+1][2]))
+            waiting_time = output[i+1][2] - temp_arr[output[i+1][0]-1][1]
+            waiting_time -= temp_arr[output[i+1][0]-1][2]
+            print("Waiting Time: {}".format(waiting_time))
+                    
+            
+        
+       
 def RR (x, y, z, arr):
     pass
 
