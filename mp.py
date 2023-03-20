@@ -15,7 +15,58 @@ def SJF (x, y, z, arr):
     pass
 
 def SRTF (x, y, z, arr):
-    pass
+    arrived_proc = []
+    gantt_chart = []
+    time = arr[0][1]
+
+    finish = False
+
+    while(not finish):
+        arr.sort(key=lambda x:x[1])
+    
+        if(len(arr) != 0):
+            #determines if process arrived
+            if(arr[0][1] <= time and arr[0][2] > 0):
+                arrived_proc.append(arr[0])
+                arr.pop(0)
+
+        arrived_proc.sort(key=lambda x:(x[2], x[1]))
+
+        pid = arrived_proc[0][0]
+        start_time = time
+        end_time = time + 1 
+
+        arrived_proc[0][2] -= 1
+        time += 1
+        
+        gantt_chart.append([pid, start_time, end_time])
+
+        #determines if burst time is empty already
+        if(arrived_proc[0][2] == 0):
+            arrived_proc.pop(0)
+
+        if(len(arrived_proc) == 0 and len(arr) == 0):
+            finish = True
+        else:
+            finish = False
+    
+    s_time = gantt_chart[0][1]
+    for i in range(0, len(gantt_chart)-1):
+            if(gantt_chart[i][0] != gantt_chart[i+1][0]):
+                e_time = gantt_chart[i][2]
+                print("{} start time: {} end time: {}".format(gantt_chart[i][0], s_time, e_time))
+                s_time = gantt_chart[i+1][1]
+                
+            elif(i == len(gantt_chart)-2):
+                if(gantt_chart[i][0] != gantt_chart[i+1][0]):
+                    e_time = gantt_chart[i][2]
+                    print("{} start time: {} end time: {}".format(gantt_chart[i][0], s_time, e_time))
+                    s_time = gantt_chart[i+1][1]
+                
+                else:
+                    e_time = gantt_chart[i+1][2]
+                    print("{} start time: {} end time: {}".format(gantt_chart[i][0], s_time, e_time))
+
 
 def RR (x, y, z, arr):
     pass
@@ -34,7 +85,8 @@ elif x == 1:
     print("1")
     z = 1    
 elif x == 2:
-    print("2")
+    arr.sort(key=lambda x:x[1])
+    SRTF(x, y, z, arr)
     z = 1    
 elif x == 3:
     print("3")
