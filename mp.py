@@ -86,9 +86,6 @@ def SRTF (x, y, z, arr):
             waiting_time = output[i+1][2] - temp_arr[output[i+1][0]-1][1]
             waiting_time -= temp_arr[output[i+1][0]-1][2]
             print("Waiting Time: {}".format(waiting_time))
-                    
-            
-        
        
 def RR (x, y, z, arr):
     pass
