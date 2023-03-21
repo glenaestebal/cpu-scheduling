@@ -34,7 +34,7 @@ def SRTF (x, y, z, arr):
             if(arr[0][1] <= time and arr[0][2] > 0):
                 arrived_proc.append(arr[0])
                 arr.pop(0)
-
+            
         arrived_proc.sort(key=lambda x:(x[2], x[1]))
 
         pid = arrived_proc[0][0]
@@ -53,7 +53,7 @@ def SRTF (x, y, z, arr):
         if(len(arrived_proc) == 0 and len(arr) == 0):
             finish = True
         else:
-            finish = False
+            finish=False
     
     s_time = gantt_chart[0][1]
     for i in range(0, len(gantt_chart)-1):
