@@ -9,8 +9,40 @@ RR                              3
 """
 import copy
 
+#arr[][0] process id
+#arr[][1] AT
+#arr[][2] BT
+
 def FCFS (x, y, z, arr):
-    pass
+    arr.sort(key=lambda x:(x[1],x[0])) # sort by arrival time, secondary key PID
+    
+    arrWT = []         # avgWT
+    ID = arr[0][0]     # process ID
+    AT = arr[0][1]     # arrival time
+    BT = arr[0][2]     # burst time
+    CT = AT + BT       # completion time
+    WT = (CT - AT - BT)# waiting time
+    arrWT.append(WT)
+    print("1 start time:", AT,"end time:", CT,"| Waiting time:", WT)
+
+    for i in range(1, y):
+        ST = arr[i][1] #start time
+        AT = arr[i][1]  
+        BT = arr[i][2]
+        
+        if(ST<CT):
+            ST = CT
+            CT = ST + BT
+        else:
+            CT = ST + BT
+            
+        WT = (CT - AT - BT)
+        arrWT.append(WT)
+        print(i + 1, "start time:", ST,"end time:", CT,"| Waiting time:", WT)
+        
+    print("Average waiting time:", sum(arrWT)/y)
+
+    
 
 def SJF (x, y, z, arr):
     pass
@@ -98,7 +130,7 @@ x, y, z = list(map(int,input().strip().split(" ")))
 arr = [list(map(int,input().strip().split(" "))) for _ in range(y)]
 
 if x == 0:
-    print("0")
+    FCFS(x, y, z, arr)
     z = 1   #  𝑍 denotes a time slice value. If the CPU scheduling algorithm indicated by the value of 𝑋 is not RR, this value must be set to 1 but ignored.    
 elif x == 1:
     print("1")
