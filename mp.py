@@ -66,7 +66,13 @@ def SRTF (x, y, z, arr):
             if(arr[0][1] <= time and arr[0][2] > 0):
                 arrived_proc.append(arr[0])
                 arr.pop(0)
-            
+
+            #checks for idle time
+            if(len(arrived_proc) == 0):
+                time = arr[0][1]
+                arrived_proc.append(arr[0])
+                arr.pop(0)
+
         arrived_proc.sort(key=lambda x:(x[2], x[1]))
 
         pid = arrived_proc[0][0]
@@ -80,12 +86,13 @@ def SRTF (x, y, z, arr):
 
         #determines if burst time is empty already
         if(arrived_proc[0][2] == 0):
-            arrived_proc.pop(0)
+                arrived_proc.pop(0)
 
         if(len(arrived_proc) == 0 and len(arr) == 0):
             finish = True
         else:
-            finish=False
+            finish = False
+            
     
     s_time = gantt_chart[0][1]
     for i in range(0, len(gantt_chart)-1):
@@ -93,7 +100,7 @@ def SRTF (x, y, z, arr):
                 e_time = gantt_chart[i][2]
                 output.append([gantt_chart[i][0], s_time, e_time])
                 s_time = gantt_chart[i+1][1]
-                
+                 
             elif(i == len(gantt_chart)-2):
                 if(gantt_chart[i][0] != gantt_chart[i+1][0]):
                     e_time = gantt_chart[i][2]
