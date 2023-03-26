@@ -114,29 +114,29 @@ def SRTF (x, y, z, arr):
     output.sort(key=lambda x:x[0])
 
     waiting_time = 0
-    toPrint = (f"{output[0][0]} start time: {output[0][1]} end time: {output[0][2]} ")
+    str_output = (f"{output[0][0]} start time: {output[0][1]} end time: {output[0][2]} ")
     for i in range(1, len(output)):
 
         if(output[i][0] == output[i-1][0]):
-            toPrint = toPrint + (f"| start time: {output[i][1]} end time: {output[i][2]} ")
+            str_output = str_output + (f"| start time: {output[i][1]} end time: {output[i][2]} ")
             
         elif(output[i][0] != output[i-1][0]):
-            toPrint = toPrint + (f"| Waiting time: {output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]}")
+            str_output = str_output + (f"| Waiting time: {output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]}")
             waiting_time += output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]
-            print(toPrint)
-            toPrint = ""
-            toPrint = (f"{output[i][0]} start time: {output[i][1]} end time: {output[i][2]} ")
+            print(str_output)
+            str_output = ""
+            str_output = (f"{output[i][0]} start time: {output[i][1]} end time: {output[i][2]} ")
         
         if(i == len(output)-1):
             if(output[i][0] == output[i-1][0]):
-                toPrint = toPrint + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
+                str_output = str_output + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
                 waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
-                print(toPrint)
+                print(str_output)
             
             elif(output[i][0] != output[i-1][0]):
-                toPrint = toPrint + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
+                str_output = str_output + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
                 waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
-                print(toPrint)
+                print(str_output)
         
     print(f"Average waiting time: {waiting_time/len(temp_arr)}")
 
