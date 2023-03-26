@@ -113,19 +113,33 @@ def SRTF (x, y, z, arr):
     
     output.sort(key=lambda x:x[0])
 
-    for i in range(0, len(output)-1):
-        print("{} start time: {} end time: {}".format(output[i][0], output[i][1], output[i][2]))
-        if(output[i][0] != output[i+1][0]):
-            waiting_time = output[i][2] - temp_arr[output[i][0]-1][1]
-            waiting_time -= temp_arr[output[i][0]-1][2]
-            print("Waiting Time: {}".format(waiting_time))
+    waiting_time = 0
+    toPrint = (f"{output[0][0]} start time: {output[0][1]} end time: {output[0][2]} ")
+    for i in range(1, len(output)):
 
-        if(i == len(output)-2):
-            print("{} start time: {} end time: {}".format(output[i+1][0], output[i+1][1], output[i+1][2]))
-            waiting_time = output[i+1][2] - temp_arr[output[i+1][0]-1][1]
-            waiting_time -= temp_arr[output[i+1][0]-1][2]
-            print("Waiting Time: {}".format(waiting_time))
-       
+        if(output[i][0] == output[i-1][0]):
+            toPrint = toPrint + (f"| start time: {output[i][1]} end time: {output[i][2]} ")
+            
+        elif(output[i][0] != output[i-1][0]):
+            toPrint = toPrint + (f"| Waiting time: {output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]}")
+            waiting_time += output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]
+            print(toPrint)
+            toPrint = ""
+            toPrint = (f"{output[i][0]} start time: {output[i][1]} end time: {output[i][2]} ")
+        
+        if(i == len(output)-1):
+            if(output[i][0] == output[i-1][0]):
+                toPrint = toPrint + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
+                waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
+                print(toPrint)
+            
+            elif(output[i][0] != output[i-1][0]):
+                toPrint = toPrint + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
+                waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
+                print(toPrint)
+        
+    print(f"Average waiting time: {waiting_time/len(temp_arr)}")
+
 def RR (x, y, z, arr):
     pass
 
