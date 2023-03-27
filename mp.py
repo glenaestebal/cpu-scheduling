@@ -53,6 +53,7 @@ def SRTF (x, y, z, arr):
     gantt_chart = []
     output = []
     time = arr[0][1]
+    idle = []
 
     temp_arr = copy.deepcopy(arr)
     temp_arr.sort(key=lambda x:x[0])
@@ -69,6 +70,7 @@ def SRTF (x, y, z, arr):
 
             #checks for idle time
             if(len(arrived_proc) == 0):
+                idle.append([time, arr[0][1]])
                 time = arr[0][1]
                 arrived_proc.append(arr[0])
                 arr.pop(0)
@@ -113,6 +115,14 @@ def SRTF (x, y, z, arr):
     
     output.sort(key=lambda x:x[0])
 
+    toPrint = "Idle Time: "
+    if(len(idle) != 0):
+        for i in range(len(idle)):
+            toPrint = toPrint + (f"start time: {idle[i][0]} end time: {idle[i][1]} ")
+            if(i < len(idle)-1):
+                toPrint = toPrint + ("| ")
+        print(toPrint)
+
     waiting_time = 0
     str_output = (f"{output[0][0]} start time: {output[0][1]} end time: {output[0][2]} ")
     for i in range(1, len(output)):
@@ -138,7 +148,7 @@ def SRTF (x, y, z, arr):
                 waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
                 print(str_output)
         
-    print(f"Average waiting time: {waiting_time/len(temp_arr)}")
+    print(f"Average waiting time: {round(waiting_time/len(temp_arr), 1)}")
 
 def RR (x, y, z, arr):
     pass
