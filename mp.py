@@ -94,25 +94,19 @@ def SRTF (x, y, z, arr):
             finish = True
         else:
             finish = False
-            
-    
+
     s_time = gantt_chart[0][1]
-    for i in range(0, len(gantt_chart)-1):
-            if(gantt_chart[i][0] != gantt_chart[i+1][0]):
-                e_time = gantt_chart[i][2]
-                output.append([gantt_chart[i][0], s_time, e_time])
-                s_time = gantt_chart[i+1][1]
-                 
-            elif(i == len(gantt_chart)-2):
-                if(gantt_chart[i][0] != gantt_chart[i+1][0]):
-                    e_time = gantt_chart[i][2]
-                    output.append([gantt_chart[i][0], s_time, e_time])
-                    s_time = gantt_chart[i+1][1]
-                
-                else:
-                    e_time = gantt_chart[i+1][2]
-                    output.append([gantt_chart[i][0], s_time, e_time])
-    
+    for i in range(1, len(gantt_chart)):
+
+        if(gantt_chart[i][0] != gantt_chart[i-1][0]):
+            e_time = gantt_chart[i-1][2]
+            output.append([gantt_chart[i-1][0], s_time, e_time])
+            s_time = gantt_chart[i][1]
+
+        if(i == len(gantt_chart)-1):
+            e_time = gantt_chart[i][2]
+            output.append([gantt_chart[i][0], s_time, e_time])
+   
     output.sort(key=lambda x:x[0])
 
     toPrint = "Idle Time: "
