@@ -52,8 +52,8 @@ def SRTF (x, y, z, arr):
     arrived_proc = []
     gantt_chart = []
     output = []
-    time = arr[0][1]
     idle = []
+    time = 0
 
     temp_arr = copy.deepcopy(arr)
     temp_arr.sort(key=lambda x:x[0])
@@ -138,15 +138,9 @@ def SRTF (x, y, z, arr):
             str_output = (f"{output[i][0]} start time: {output[i][1]} end time: {output[i][2]} ")
         
         if(i == len(output)-1):
-            if(output[i][0] == output[i-1][0]):
-                str_output = str_output + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
-                waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
-                print(str_output)
-            
-            elif(output[i][0] != output[i-1][0]):
-                str_output = str_output + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
-                waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
-                print(str_output)
+            str_output = str_output + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
+            waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
+            print(str_output)
         
     print(f"Average waiting time: {round(waiting_time/len(temp_arr), 1)}")
 
