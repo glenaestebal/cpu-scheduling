@@ -23,6 +23,18 @@ def FCFS (x, y, z, arr):
     CT = AT + BT       # completion time
     WT = (CT - AT - BT)# waiting time
     arrWT.append(WT)
+
+    idle = []           # idle time
+    idleST = []         # idle start time
+    idleET = []         # idle end time
+
+    
+    if AT != 0:
+        print("idle start time: 0 end time:", AT)
+#       idle.append(AT)
+        idleST.append(0)
+        idleET.append(AT)
+    
     print("1 start time:", AT,"end time:", CT,"| Waiting time:", WT)
 
     for i in range(1, y):
@@ -30,18 +42,30 @@ def FCFS (x, y, z, arr):
         AT = arr[i][1]  
         BT = arr[i][2]
         
-        if(ST<CT):
+        if(ST<=CT):    #if next process arrival time is less than or equal to the completion time of the process before it, the next starting time will be the arrival time. 
             ST = CT
             CT = ST + BT
-        else:
+        else:         #if next process arrival time is higher than completion time of the process before it, there will be idle time.
+            print("idle start time:", CT, "end time:", AT)
+#           idle.append(ST - CT)
+            idleST.append(CT)
+            idleET.append(AT)
             CT = ST + BT
             
         WT = (CT - AT - BT)
         arrWT.append(WT)
         print(i + 1, "start time:", ST,"end time:", CT,"| Waiting time:", WT)
+
+    if(len(idleST) > 0): #print process of idle time
+        print("idle ", end="")
+        for i in range(0, len(idleST)-1):
+           print("start time:", idleST[i],"end time:", idleET[i], "|", end="") 
+        print("start time:", idleST[i-1],"end time:", idleET[i-1])
         
     print("Average waiting time:", sum(arrWT)/y)
-
+    
+#   if(len(idle) > 0):
+#     print("Total idle time: ", sum(idle))
     
 
 def SJF (x, y, z, arr):
