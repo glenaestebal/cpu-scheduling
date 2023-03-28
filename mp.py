@@ -84,7 +84,6 @@ def SRTF (x, y, z, arr):
 
     finish = False
     while(not finish):
-        arr.sort(key=lambda x:(x[1], x[2]))
         for value in arr.copy():
             if(value[1] <= time and value[2] > 0):
                 arrived_proc.append(value)
