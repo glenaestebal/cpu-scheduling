@@ -94,7 +94,7 @@ def SRTF (x, y, z, arr):
            
         #checks for idle time
         if(len(arrived_proc) == 0 and len(arr) != 0):
-            #idle.append([time, arr[0][1]])
+            idle.append([time, arr[0][1]])
             time = arr[0][1]
             for value in arr.copy():
                 if(value[1] <= time and value[2] > 0):
