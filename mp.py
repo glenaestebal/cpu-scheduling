@@ -27,11 +27,9 @@ def FCFS (x, y, z, arr):
     idle = []           # idle time
     idleST = []         # idle start time
     idleET = []         # idle end time
-
     
     if AT != 0:
         print("idle start time: 0 end time:", AT)
-#       idle.append(AT)
         idleST.append(0)
         idleET.append(AT)
     
@@ -47,7 +45,6 @@ def FCFS (x, y, z, arr):
             CT = ST + BT
         else:         #if next process arrival time is higher than completion time of the process before it, there will be idle time.
             print("idle start time:", CT, "end time:", AT)
-#           idle.append(ST - CT)
             idleST.append(CT)
             idleET.append(AT)
             CT = ST + BT
@@ -60,14 +57,11 @@ def FCFS (x, y, z, arr):
         print("idle ", end="")
         for i in range(0, len(idleST)-1):
            print("start time:", idleST[i],"end time:", idleET[i], "|", end="") 
-        print("start time:", idleST[i-1],"end time:", idleET[i-1])
-        
-    print("Average waiting time:", sum(arrWT)/y)
-    
-#   if(len(idle) > 0):
-#     print("Total idle time: ", sum(idle))
-    
+        print("start time:", idleST[-1],"end time:", idleET[-1])
 
+    avgWT = sum(arrWT)/y
+    print("Average waiting time: %.1f" % avgWT)
+    
 def SJF (x, y, z, arr):
     pass
 
