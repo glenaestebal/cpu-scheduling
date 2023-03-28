@@ -60,27 +60,31 @@ def SRTF (x, y, z, arr):
 
     finish = False
     while(not finish):
-        arr.sort(key=lambda x:x[1])
-    
-        if(len(arr) != 0):
-            #determines if process arrived
-            if(arr[0][1] <= time and arr[0][2] > 0):
-                arrived_proc.append(arr[0])
-                arr.pop(0)
+        arr.sort(key=lambda x:(x[1]))
+        for value in arr.copy():
+            if(value[1] <= time and value[2] > 0):
+                arrived_proc.append(value)
+                arr.remove(value)
+            else:
+                break
+           
+        #checks for idle time
+        if(len(arrived_proc) == 0 and len(arr) != 0):
+            #idle.append([time, arr[0][1]])
+            time = arr[0][1]
+            for value in arr.copy():
+                if(value[1] <= time and value[2] > 0):
+                    arrived_proc.append(value)
+                    arr.remove(value)
+                else:
+                    break
 
-            #checks for idle time
-            if(len(arrived_proc) == 0):
-                idle.append([time, arr[0][1]])
-                time = arr[0][1]
-                arrived_proc.append(arr[0])
-                arr.pop(0)
-
-        arrived_proc.sort(key=lambda x:(x[2], x[1]))
+        arrived_proc.sort(key=lambda x:(x[2],x[1]))
 
         pid = arrived_proc[0][0]
         start_time = time
         end_time = time + 1 
-
+                
         arrived_proc[0][2] -= 1
         time += 1
         
@@ -88,7 +92,7 @@ def SRTF (x, y, z, arr):
 
         #determines if burst time is empty already
         if(arrived_proc[0][2] == 0):
-                arrived_proc.pop(0)
+            arrived_proc.pop(0)
 
         if(len(arrived_proc) == 0 and len(arr) == 0):
             finish = True
@@ -155,7 +159,7 @@ elif x == 1:
     print("1")
     z = 1    
 elif x == 2:
-    arr.sort(key=lambda x:x[1])
+    arr.sort(key=lambda x:(x[1], x[2]))
     SRTF(x, y, z, arr)
     z = 1    
 elif x == 3:
