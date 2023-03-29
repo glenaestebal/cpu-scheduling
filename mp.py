@@ -116,7 +116,6 @@ def SJF (x, y, z, arr):
                 # make the start time the arrival time 
                 start_time = normal_queue[0][1] 
 
-
             end_time = start_time + normal_queue[0][2]
             waiting_time = start_time - normal_queue[0][1]
             gantt_chart.append([normal_queue[0][0], start_time, end_time, waiting_time, 0])
@@ -131,7 +130,7 @@ def SJF (x, y, z, arr):
     gantt_chart.sort(key=lambda x:(x[0], x[3]))
 
     # writing the output to a file
-    with open("output.txt", "w") as f:
+    with open("output-SJF.txt", "w") as f:
         for pid, start_time, end_time, waiting_time, is_idle in gantt_chart:
             _id = pid if not is_idle else "IDLE"
             f.write(f"{_id} start time: {start_time} end time: {end_time} | Waiting time: {waiting_time}\n")
@@ -245,7 +244,7 @@ if x == 0:
     FCFS(x, y, z, arr)
     z = 1   #  𝑍 denotes a time slice value. If the CPU scheduling algorithm indicated by the value of 𝑋 is not RR, this value must be set to 1 but ignored.    
 elif x == 1:
-    print("1")
+    SJF(x, y, z, arr)
     z = 1    
 elif x == 2:
     arr.sort(key=lambda x:(x[1], x[2]))
