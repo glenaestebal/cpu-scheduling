@@ -63,7 +63,79 @@ def FCFS (x, y, z, arr):
     print("Average waiting time: %.1f" % avgWT)
     
 def SJF (x, y, z, arr):
-    pass
+    start_time = 0
+    gantt_chart = []
+
+    # [pid, at, bt] dinagdagan ng state {0, 1} -> [pid, at, bt, state]
+    # * : spread operator [1, 2, 3] -> 1, 2, 3, di na nagiging array para madagdag yung state
+    # [pid, at, bt] -> [pid, at, bt, state]
+    arr = list(map(lambda x: [*x, 0], arr))  
+    arr.sort(key=lambda x: x[1])
+    
+    for pid, arrival_time, burst_time, state in arr:
+        ready_queue = [] # for processes that have arrived
+        normal_queue = [] # for processes that have not yet arrived
+
+        for p, at, bt, s in arr:
+            # processes less than start time and not yet executed are stored in ready_queue
+            if at <= start_time and s == 0: 
+                ready_queue.append([p, at, bt])
+            # processes that are not less than the start time but have not yet executed are stored in the normal queue
+            elif s == 0:
+                normal_queue.append([p, at, bt])
+
+        # if may laman ang ready queue, 
+        if len(ready_queue) > 0:
+            # kinuha yung minimum burst time
+            shortest = min(ready_queue, key=lambda x: x[2]) 
+            # end time will be start time + burst time of the process
+            end_time = start_time + shortest[2]
+            # getting waiting time
+            waiting_time = start_time - shortest[1]
+            # appending to the gantt chart
+            gantt_chart.append([shortest[0], start_time, end_time, waiting_time, 0])
+            # setting end time as the start time of the next process
+            start_time = end_time
+        
+            # process that has been executed in the ready queue is set to state 1 or processed state
+            for i in range(len(arr)):
+                if arr[i][0] == shortest[0]:     
+                    arr[i][3] = 1
+                    break
+            
+        # if there are no processes in ready queue, go check normal queue for the processes that have not arrived yet
+        else: 
+            # if start time is less than the arrival time of the first process sa normal queue
+            if start_time < normal_queue[0][1]: 
+                # idle time
+                idle_start = start_time # at this state start time = to the end time of the previous process
+                idle_end = normal_queue[0][1]
+                waiting_time = start_time - normal_queue[0][1]
+                # appending to the gantt chart, last value: is_idle (1 if yes, 0 if no)
+                gantt_chart.append([normal_queue[0][0], idle_start, idle_end, waiting_time, 1])
+                # make the start time the arrival time 
+                start_time = normal_queue[0][1] 
+
+
+            end_time = start_time + normal_queue[0][2]
+            waiting_time = start_time - normal_queue[0][1]
+            gantt_chart.append([normal_queue[0][0], start_time, end_time, waiting_time, 0])
+            start_time = end_time
+
+            for i in range(len(arr)):
+                if arr[i][0] == normal_queue[0][0]:
+                    arr[i][3] = 1
+                    break
+
+    # sorting the output by process id
+    gantt_chart.sort(key=lambda x:(x[0], x[3]))
+
+    # writing the output to a file
+    with open("output.txt", "w") as f:
+        for pid, start_time, end_time, waiting_time, is_idle in gantt_chart:
+            _id = pid if not is_idle else "IDLE"
+            f.write(f"{_id} start time: {start_time} end time: {end_time} | Waiting time: {waiting_time}\n")
+        f.write(f"Average waiting time: {sum(map(lambda x:x[3], gantt_chart))/y:.1f}\n")
 
 def SRTF (x, y, z, arr):
     temp_arr = []
