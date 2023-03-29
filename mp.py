@@ -110,7 +110,7 @@ def SJF (x, y, z, arr):
                 # idle time
                 idle_start = start_time # at this state start time = to the end time of the previous process
                 idle_end = normal_queue[0][1]
-                waiting_time = start_time - normal_queue[0][1]
+                waiting_time = 0
                 # appending to the gantt chart, last value: is_idle (1 if yes, 0 if no)
                 gantt_chart.append([normal_queue[0][0], idle_start, idle_end, waiting_time, 1])
                 # make the start time the arrival time 
