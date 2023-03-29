@@ -1,0 +1,15 @@
+Idle Time: start time: 0 end time: 1 
+1 start time: 1 end time: 3 | start time: 37 end time: 55 | Waiting time: 34
+2 start time: 3 end time: 7 | Waiting time: 0
+3 start time: 8 end time: 14 | Waiting time: 0
+4 start time: 25 end time: 37 | Waiting time: 14
+5 start time: 101 end time: 314 | Waiting time: 99
+6 start time: 957 end time: 1179 | Waiting time: 956
+7 start time: 314 end time: 527 | Waiting time: 312
+8 start time: 78 end time: 101 | Waiting time: 71
+9 start time: 55 end time: 78 | Waiting time: 53
+10 start time: 740 end time: 957 | Waiting time: 734
+11 start time: 1179 end time: 2410 | Waiting time: 1177
+12 start time: 7 end time: 8 | start time: 14 end time: 25 | Waiting time: 7
+13 start time: 527 end time: 740 | Waiting time: 525
+Average waiting time: 306.3

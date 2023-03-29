@@ -202,34 +202,35 @@ def SRTF (x, y, z, arr):
    
     output.sort(key=lambda x:x[0])
 
-    toPrint = "Idle Time: "
-    if(len(idle) != 0):
-        for i in range(len(idle)):
-            toPrint = toPrint + (f"start time: {idle[i][0]} end time: {idle[i][1]} ")
-            if(i < len(idle)-1):
-                toPrint = toPrint + ("| ")
-        print(toPrint)
+    with open("output-srtf.txt", "w") as f:
+        toPrint = "Idle Time: "
+        if(len(idle) != 0):
+            for i in range(len(idle)):
+                toPrint = toPrint + (f"start time: {idle[i][0]} end time: {idle[i][1]} ")
+                if(i < len(idle)-1):
+                    toPrint = toPrint + ("| ")
+            f.write(toPrint + "\n")
+        
+        waiting_time = 0
+        str_output = (f"{output[0][0]} start time: {output[0][1]} end time: {output[0][2]} ")
+        for i in range(1, len(output)):
 
-    waiting_time = 0
-    str_output = (f"{output[0][0]} start time: {output[0][1]} end time: {output[0][2]} ")
-    for i in range(1, len(output)):
-
-        if(output[i][0] == output[i-1][0]):
-            str_output = str_output + (f"| start time: {output[i][1]} end time: {output[i][2]} ")
+            if(output[i][0] == output[i-1][0]):
+                str_output = str_output + (f"| start time: {output[i][1]} end time: {output[i][2]} ")
+                
+            elif(output[i][0] != output[i-1][0]):
+                str_output = str_output + (f"| Waiting time: {output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]}\n")
+                waiting_time += output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]
+                f.write(str_output)
+                str_output = ""
+                str_output = (f"{output[i][0]} start time: {output[i][1]} end time: {output[i][2]} ")
             
-        elif(output[i][0] != output[i-1][0]):
-            str_output = str_output + (f"| Waiting time: {output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]}")
-            waiting_time += output[i-1][2] - temp_arr[output[i-1][0]-1][1] - temp_arr[output[i-1][0]-1][2]
-            print(str_output)
-            str_output = ""
-            str_output = (f"{output[i][0]} start time: {output[i][1]} end time: {output[i][2]} ")
-        
-        if(i == len(output)-1):
-            str_output = str_output + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}")
-            waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
-            print(str_output)
-        
-    print(f"Average waiting time: {round(waiting_time/len(temp_arr), 1)}")
+            if(i == len(output)-1):
+                str_output = str_output + (f"| Waiting time: {output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]}\n")
+                waiting_time += output[i][2] - temp_arr[output[i][0]-1][1] - temp_arr[output[i][0]-1][2]
+                f.write(str_output)
+            
+        f.write(f"Average waiting time: {round(waiting_time/len(temp_arr), 1)}")
 
 def RR (x, y, z, arr):
     pass
