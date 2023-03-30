@@ -130,10 +130,12 @@ def SJF (x, y, z, arr):
     gantt_chart.sort(key=lambda x:(x[0], x[3]))
 
     # writing the output to a file
-    with open("output-SJF.txt", "w") as f:
+    with open("output-sjf.txt", "w") as f:
         for pid, start_time, end_time, waiting_time, is_idle in gantt_chart:
             _id = pid if not is_idle else "IDLE"
+            print(f"{_id} start time: {start_time} end time: {end_time} | Waiting time: {waiting_time}")
             f.write(f"{_id} start time: {start_time} end time: {end_time} | Waiting time: {waiting_time}\n")
+        print(f"Average waiting time: {sum(map(lambda x:x[3], gantt_chart))/y:.1f}\n")
         f.write(f"Average waiting time: {sum(map(lambda x:x[3], gantt_chart))/y:.1f}\n")
 
 def SRTF (x, y, z, arr):
