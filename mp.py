@@ -9,10 +9,6 @@ RR                              3
 """
 import copy
 
-#arr[][0] process id
-#arr[][1] AT
-#arr[][2] BT
-
 def FCFS (x, y, z, arr):
     arr.sort(key=lambda x:(x[1],x[0])) # sort by arrival time, secondary key PID
     
@@ -24,44 +20,52 @@ def FCFS (x, y, z, arr):
     WT = (CT - AT - BT)# waiting time
     arrWT.append(WT)
 
-    idle = []           # idle time
     idleST = []         # idle start time
     idleET = []         # idle end time
-    
-    if AT != 0:
-        print("idle start time: 0 end time:", AT)
-        idleST.append(0)
-        idleET.append(AT)
-    
-    print("1 start time:", AT,"end time:", CT,"| Waiting time:", WT)
 
-    for i in range(1, y):
-        ST = arr[i][1] #start time
-        AT = arr[i][1]  
-        BT = arr[i][2]
-        
-        if(ST<=CT):    #if next process arrival time is less than or equal to the completion time of the process before it, the next starting time will be the arrival time. 
-            ST = CT
-            CT = ST + BT
-        else:         #if next process arrival time is higher than completion time of the process before it, there will be idle time.
-            print("idle start time:", CT, "end time:", AT)
-            idleST.append(CT)
+    with open("output-FCFS.txt", "w") as f:
+        if AT != 0: #if AT != 0 then it prints idle time, appends 0 to list of idleST and AT to idleET
+            print("idle start time: 0 end time:", AT)
+            f.write(f"idle start time: 0 end time: {AT}\n")
+            idleST.append(0)
             idleET.append(AT)
-            CT = ST + BT
+
+        print("1 start time:", AT,"end time:", CT,"| Waiting time:", WT)
+        f.write(f"1 start time: {AT} end time: {CT} | Waiting time: {WT}\n") #prints first process
+
+        for i in range(1, y):
+            ST = arr[i][1] #start time
+            AT = arr[i][1]  
+            BT = arr[i][2]
             
-        WT = (CT - AT - BT)
-        arrWT.append(WT)
-        print(i + 1, "start time:", ST,"end time:", CT,"| Waiting time:", WT)
+            if(ST<=CT):    #if next process arrival time is less than or equal to the completion time of the process before it, the next starting time will be the arrival time. 
+                ST = CT
+                CT = ST + BT
+            else:         #if next process arrival time is higher than completion time of the process before it, there will be idle time.
+                print("idle start time:", CT, "end time:", AT)
+                f.write(f"idle start time: {CT} end time: {AT}\n")
+                idleST.append(CT)
+                idleET.append(AT)
+                CT = ST + BT
 
-    if(len(idleST) > 0): #print process of idle time
-        print("idle ", end="")
-        for i in range(0, len(idleST)-1):
-           print("start time:", idleST[i],"end time:", idleET[i], "|", end="") 
-        print("start time:", idleST[-1],"end time:", idleET[-1])
+            WT = (CT - AT - BT)
+            arrWT.append(WT)
+            print(i + 1, "start time:", ST,"end time:", CT,"| Waiting time:", WT)
+            f.write(f"{i + 1} start time: {ST} end time: {CT} | Waiting time: {WT}\n")
 
-    avgWT = sum(arrWT)/y
-    print("Average waiting time: %.1f" % avgWT)
-    
+        if(len(idleST) > 0): #print process of idle time
+            print("idle ", end="")
+            f.write(f"idle ")
+            for i in range(0, len(idleST)-1):
+                print("start time:", idleST[i],"end time:", idleET[i], "|", end="") 
+                f.write(f"start time: {idleST[i]} end time: {idleET[i]} | ")
+            print("start time:", idleST[-1],"end time:", idleET[-1])   
+            f.write(f"start time: {idleST[-1]} end time: {idleET[-1]}")
+
+        avgWT = sum(arrWT)/y
+        print("Average waiting time: %.1f" % avgWT)
+        f.write(f"\nAverage waiting time: {avgWT:.1f}")
+        
 def SJF (x, y, z, arr):
     start_time = 0
     gantt_chart = []
@@ -130,10 +134,12 @@ def SJF (x, y, z, arr):
     gantt_chart.sort(key=lambda x:(x[0], x[3]))
 
     # writing the output to a file
-    with open("output-SJF.txt", "w") as f:
+    with open("output-sjf.txt", "w") as f:
         for pid, start_time, end_time, waiting_time, is_idle in gantt_chart:
             _id = pid if not is_idle else "IDLE"
+            print(f"{_id} start time: {start_time} end time: {end_time} | Waiting time: {waiting_time}")
             f.write(f"{_id} start time: {start_time} end time: {end_time} | Waiting time: {waiting_time}\n")
+        print(f"Average waiting time: {sum(map(lambda x:x[3], gantt_chart))/y:.1f}\n")
         f.write(f"Average waiting time: {sum(map(lambda x:x[3], gantt_chart))/y:.1f}\n")
 
 def SRTF (x, y, z, arr):
