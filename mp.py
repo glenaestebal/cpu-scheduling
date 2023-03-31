@@ -9,6 +9,7 @@ RR                              3
 """
 import copy
 from collections import deque
+import numpy as np
 
 def FCFS (x, y, z, arr):
     arr.sort(key=lambda x:(x[1],x[0])) # sort by arrival time, secondary key PID
@@ -377,10 +378,27 @@ def RR (x, y, z, arr):
 
 
 # main
-x, y, z = list(map(int,input().strip().split(" ")))
 
-# arr[i] contains a, b, c
-arr = [list(map(int,input().strip().split(" "))) for _ in range(y)]
+# ask user whether to read from file or type in array
+choice = input("Enter 'filename.txt' to read from a file, or 'console' to type in an array: ")
+
+# read from file
+if  choice == "console":
+    x, y, z = list(map(int,input().strip().split(" ")))
+    # arr[i] contains a, b, c
+    arr = [list(map(int,input().strip().split(" "))) for _ in range(y)]
+else:
+    arr = np.loadtxt(choice, dtype = 'int')
+    str= np.array2string(arr[0], separator=' ').strip("[]").split()
+    x = int(str[0])
+    y = int(str[1])
+    z = int(str[2])
+
+    arr = arr.tolist()
+    del arr[0]
+
+    
+
 
 if x == 0:
     FCFS(x, y, z, arr)
