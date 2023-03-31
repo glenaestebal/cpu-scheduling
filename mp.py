@@ -116,9 +116,8 @@ def SJF (x, y, z, arr):
                 # idle time
                 idle_start = start_time # at this state start time = to the end time of the previous process
                 idle_end = normal_queue[0][1]
-                waiting_time = 0
                 # appending to the gantt chart, last value: is_idle (1 if yes, 0 if no)
-                gantt_chart.append([normal_queue[0][0], idle_start, idle_end, waiting_time, 1])
+                gantt_chart.append([normal_queue[0][0], idle_start, idle_end, 0, 1])
                 # make the start time the arrival time 
                 start_time = normal_queue[0][1] 
 
@@ -139,8 +138,9 @@ def SJF (x, y, z, arr):
     with open("output-sjf.txt", "w") as f:
         for pid, start_time, end_time, waiting_time, is_idle in gantt_chart:
             _id = pid if not is_idle else "IDLE"
-            print(f"{_id} start time: {start_time} end time: {end_time} | Waiting time: {waiting_time}")
-            f.write(f"{_id} start time: {start_time} end time: {end_time} | Waiting time: {waiting_time}\n")
+            wt = f"| Waiting time: {waiting_time}" if not is_idle else ""
+            print(f"{_id} start time: {start_time} end time: {end_time} {wt}")
+            f.write(f"{_id} start time: {start_time} end time: {end_time} {wt}\n")
         print(f"Average waiting time: {sum(map(lambda x:x[3], gantt_chart))/y:.1f}\n")
         f.write(f"Average waiting time: {sum(map(lambda x:x[3], gantt_chart))/y:.1f}\n")
 
@@ -244,8 +244,7 @@ def SRTF (x, y, z, arr):
         print(f"Average waiting time: {round(waiting_time/len(temp_arr), 1)}")
 
 def RR (x, y, z, arr):
-    
-    
+        
     queue = deque()
     temp_array = deque(arr)
     c_time = 0

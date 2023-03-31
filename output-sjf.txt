@@ -1,4 +1,4 @@
-IDLE start time: 0 end time: 12 | Waiting time: 0
+IDLE start time: 0 end time: 12 
 1 start time: 12 end time: 261 | Waiting time: 0
 2 start time: 8830 end time: 9115 | Waiting time: 8815
 3 start time: 151092 end time: 152553 | Waiting time: 151068
