@@ -8,6 +8,7 @@ RR                              3
 
 """
 import copy
+from collections import deque
 
 def FCFS (x, y, z, arr):
     arr.sort(key=lambda x:(x[1],x[0])) # sort by arrival time, secondary key PID
@@ -242,7 +243,137 @@ def SRTF (x, y, z, arr):
         print(f"Average waiting time: {round(waiting_time/len(temp_arr), 1)}")
 
 def RR (x, y, z, arr):
-    pass
+    
+    
+    queue = deque()
+    temp_array = deque(arr)
+    c_time = 0
+    start_time = [None] * len(arr)
+    end_time = [None] * len(arr)
+    waiting_time = [None] * len(arr)
+    burst = []
+    idle_time = []
+
+    #Store burst times
+    for x in arr:
+        burst.append(x[2])
+
+    while queue or temp_array:
+        # Execute the first process in the queue
+        try:
+            execute = queue.popleft()
+        except:
+            #if no process in queue, but temp_array is not empty
+            if (len(temp_array) != 0):
+                next = temp_array.popleft()
+
+                #save idle time
+                if(next[1] > c_time):
+                    idle_time.append([c_time, next[1]])
+                    c_time = next[1]
+                
+                queue.append(next)
+                execute = queue.popleft()
+
+        #If execute does not have a start time, add c_time
+        for x in arr:
+            if  (execute[0] == x[0]):
+                if (start_time[x[0]-1] == None):
+                    start_time[x[0]-1] = c_time
+
+        # Process for z time units
+        # #If burst time is smaller than quantum z, c_time += burst
+        if (execute[2] < z):
+            c_time += execute[2]
+            execute[2] = 0
+            
+        else:
+            c_time += z
+            execute[2] -= z
+
+
+        #if next process arrives
+        if (len(temp_array) != 0):
+            next2 = temp_array.popleft()
+            if(next2[1] == c_time):
+                queue.append(next2)
+            else:
+                temp_array.appendleft(next2)
+
+        try:
+            #if burst > 0, put at the back of queue
+            if(execute[2] > 0):
+                queue.append(execute)
+
+            #else, update waiting time
+            else:
+                #waiting = curr - arrival - burst
+                for x in arr:
+                
+                    if(execute[0] == x[0]):
+                        waiting_time[x[0] -1 ] = c_time - execute[1] - burst[x[0]-1]
+                        end_time[x[0]-1] = c_time
+                if(len(queue) == 0 and len(temp_array) == 0):
+
+                    #print to console
+                    x = 0
+                    while (x <= len(start_time)-1):
+                        #check if theres idle
+                        for i in idle_time:
+                            if(i[1] == start_time[x]):
+                                print("Idle start time: ", end ="")
+                                print(i[0], end ="")
+                                print(" end time: ", end = "")
+                                print(i[1])
+                        print(x + 1, end = "")
+                        print(" start time: ", end = "")
+                        print(start_time[x], end ="")
+                        print(" end time: ", end ="")
+                        print(end_time[x], end = "")
+                        print(" | Waiting time: ", end= "")
+
+                        if(waiting_time[x] == None):
+                            print(" 0 ", end ="")
+                        else:
+                            print(waiting_time[x])
+                        x += 1
+                    
+                    print("Average Waiting time: ", end = "")
+                    avg = round(sum(waiting_time)/len(start_time),1)
+                    print(avg)
+                    
+                    #print to file
+                    x = 0
+                    with open("output-rr.txt", "w") as f:
+                        while (x <= len(start_time)-1):
+                            #check if theres idle
+                            for i in idle_time:
+                                if(i[1] == start_time[x]):
+                                    print("Idle start time: ", end ="", file = f)
+                                    print(i[0], end ="", file = f)
+                                    print(" end time: ", end = "",file = f)
+                                    print(i[1], file = f)
+                                    # print("\n", file = f)
+                            print(x + 1, end = "",file = f)
+                            print(" start time: ", end = "",file = f)
+                            print(start_time[x], end ="",file = f)
+                            print(" end time: ", end ="",file = f)
+                            print(end_time[x], end = "",file = f)
+                            print(" | Waiting time: ", end= "",file = f)
+
+                            if(waiting_time[x] == None):
+                                print(" 0 ", end ="",file = f)
+                            else:
+                                print(waiting_time[x], file = f)
+
+                            # print("\n", file = f)
+                            x += 1
+                        print("Average Waiting time: ", end = "",file = f)
+                        avg = round(sum(waiting_time)/len(start_time),1)
+                        print(avg, file = f)
+        except:
+                print()
+
 
 
 # main
@@ -262,7 +393,8 @@ elif x == 2:
     SRTF(x, y, z, arr)
     z = 1    
 elif x == 3:
-    print("3")
+    arr.sort(key=lambda x:(x[1]))
+    RR(x,y,z,arr)
 else:
     print("Invalid input")
 
